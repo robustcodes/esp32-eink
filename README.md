@@ -226,7 +226,7 @@ make monitor       # View serial output
 
 ### Hardware (One-time)
 - LOLIN32 ESP32 board: ~€8-12
-- 7.5" E-Ink display (3-color): ~€25-35
+- 7.5" E-Ink display (3-color): ~€50
 - Li-Po battery 3.7V 1200mAh: ~€5-8
 - **Total: €40-55**
 
