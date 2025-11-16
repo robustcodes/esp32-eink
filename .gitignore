@@ -1,0 +1,138 @@
+# ============================================
+# Security - Credentials and Certificates
+# ============================================
+
+# ESP32 configuration (contains WiFi password)
+eink-calendar/config.h
+
+# AWS IoT certificates (private keys!)
+eink-calendar/certs/*
+!eink-calendar/certs/.gitkeep
+eink-calendar/data/certs/*
+!eink-calendar/data/certs/.gitkeep
+
+# Infrastructure environment (API keys, OAuth tokens)
+infrastructure/.env
+
+# ============================================
+# Dependencies and Build Artifacts
+# ============================================
+
+# Node.js dependencies
+node_modules/
+package-lock.json
+
+# Python dependencies
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+infrastructure/lambda/layer/python/
+infrastructure/lambda/layer/*.zip
+
+# AWS CDK outputs
+infrastructure/cdk.out/
+*.js
+*.d.ts
+!infrastructure/lib/*.js
+!infrastructure/bin/*.js
+
+# ESP32 build artifacts
+eink-calendar/build/
+*.bin
+*.elf
+*.map
+
+# ============================================
+# IDE and Editor Files
+# ============================================
+
+# Claude Code
+.claude/
+**/.claude/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs (PyCharm, IntelliJ, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim
+*.swp
+*.swo
+*~
+.*.sw?
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ============================================
+# Operating System Files
+# ============================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+
+# Linux
+.directory
+.Trash-*
+
+# ============================================
+# Temporary and Log Files
+# ============================================
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Test coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# ============================================
+# Project-Specific
+# ============================================
+
+# LittleFS filesystem images
+littlefs.bin
+spiffs.bin
+
+# Compressed files (unless specifically needed)
+*.zip
+*.tar.gz
+*.tgz
+
+# Local environment overrides
+.env.local
+.env.*.local

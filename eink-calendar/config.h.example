@@ -1,0 +1,42 @@
+/**
+ * Configuration file for E-Ink Calendar with AWS IoT
+ *
+ * INSTRUCTIONS:
+ * 1. Copy this file to config.h
+ * 2. Fill in your actual WiFi credentials
+ * 3. Update AWS IoT endpoint from your AWS account
+ * 4. Update thing name to match your IoT device
+ *
+ * SECURITY WARNING:
+ * - Never commit config.h to git!
+ * - Keep your WiFi password and AWS credentials private
+ */
+
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// ==================== WiFi Configuration ====================
+#define WIFI_SSID     "YOUR_WIFI_SSID"
+#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+
+// ==================== AWS IoT Configuration ====================
+// Get your endpoint from: aws iot describe-endpoint --endpoint-type iot:Data-ATS
+#define AWS_IOT_ENDPOINT "YOUR_AWS_IOT_ENDPOINT.iot.REGION.amazonaws.com"
+#define AWS_THING_NAME   "eink-calendar-01"
+
+// MQTT Topics (update if you change thing name)
+#define CALENDAR_TOPIC "calendar/eink-calendar-01/events"
+#define WEATHER_TOPIC  "calendar/eink-calendar-01/weather"
+
+// ==================== Display Configuration ====================
+// Sleep time between updates (in minutes)
+#define SLEEP_TIME_MINUTES 30
+
+// ==================== Advanced Settings ====================
+// Enable debug output
+#define DEBUG_MODE true
+
+// WiFi connection timeout in seconds
+#define WIFI_TIMEOUT 30
+
+#endif // CONFIG_H
