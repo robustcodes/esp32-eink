@@ -228,7 +228,7 @@ make monitor       # View serial output
 - LOLIN32 ESP32 board: ~€8-12
 - 7.5" E-Ink display (3-color): ~€50
 - Li-Po battery 3.7V 1200mAh: ~€5-8
-- **Total: €60-70**
+- **Total: €63-70**
 
 ### Cloud Services (Monthly)
 - AWS IoT Core + Lambda + CloudWatch: **~€0.50-2/month**
