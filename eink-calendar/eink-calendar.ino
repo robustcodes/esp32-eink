@@ -529,17 +529,20 @@ void setup() {
   display.setRotation(3);  // Rotate 270 degrees for portrait orientation
   display.setTextColor(GxEPD_BLACK);
 
-  // Show boot screen
-  showBootScreen();
-
-  // Connect to WiFi
+  // Connect to WiFi first (before loading screen)
   Serial.println("\n[WiFi] Connecting to network...");
   if (!wifi.connect()) {
     Serial.println("[WiFi] Connection failed!");
+    // WiFi failed: Don't show loading screen, just clear WiFi bars and preserve calendar
+    // E-ink is bistable - old calendar data remains visible
     showError("WiFi Connection Failed");
     goToSleep();
     return;
   }
+
+  // WiFi connected: Show loading screen for full refresh (prevents e-ink ghosting)
+  Serial.println("[WiFi] Connected! Showing loading screen...");
+  showBootScreen();
 
   // Load AWS IoT certificates
   Serial.println("\n[AWS IoT] Loading certificates...");
@@ -658,28 +661,27 @@ void showBootScreen() {
 }
 
 void showError(const char* message) {
-  // Instead of full refresh, just update network indicator area
-  // Draw a diagonal red line through the WiFi bars area to indicate error
+  // Show WiFi error by clearing bars area (0 bars = no connection)
   Serial.print("[Display] Showing error indicator: ");
   Serial.println(message);
 
-  // Define WiFi bars area (bottom-right corner) - matches footer position
-  int barX = DISPLAY_WIDTH - 57;  // Right side, moved 0.6cm right
-  int barY = DISPLAY_HEIGHT - 105;  // Bottom, moved 0.6cm down
-  int areaWidth = 38;
-  int areaHeight = 20;
+  // WiFi bars area (must match drawFooter() exactly!)
+  int barX = DISPLAY_WIDTH - 77;  // Left edge of WiFi bars
+  int barY = DISPLAY_HEIGHT - 51;  // Bottom of WiFi bars
+  int barWidth = 6;
+  int barSpacing = 2;
+  int totalWidth = 4 * (barWidth + barSpacing) - barSpacing;  // 4 bars = 30px total
+  int maxBarHeight = 6 + (3 * 4);  // Tallest bar = 18px
 
-  // Use partial window update for just the indicator area
-  display.setPartialWindow(barX - 5, barY - areaHeight, areaWidth, areaHeight);
+  // Partial update window with small margin
+  int margin = 2;
+  display.setPartialWindow(barX - margin, barY - maxBarHeight - margin,
+                          totalWidth + 2 * margin, maxBarHeight + 2 * margin);
   display.firstPage();
   do {
-    // Clear the area
-    display.fillRect(barX - 5, barY - areaHeight, areaWidth, areaHeight, GxEPD_WHITE);
-
-    // Draw diagonal red line (bottom-left to top-right of the indicator area)
-    display.drawLine(barX - 5, barY, barX + areaWidth - 10, barY - areaHeight + 5, GxEPD_RED);
-    display.drawLine(barX - 4, barY, barX + areaWidth - 9, barY - areaHeight + 5, GxEPD_RED);
-    display.drawLine(barX - 3, barY, barX + areaWidth - 8, barY - areaHeight + 5, GxEPD_RED);
+    // Clear the WiFi bars area to show 0 bars (no connection)
+    display.fillRect(barX - margin, barY - maxBarHeight - margin,
+                    totalWidth + 2 * margin, maxBarHeight + 2 * margin, GxEPD_WHITE);
   } while (display.nextPage());
   delay(100);
   display.hibernate();

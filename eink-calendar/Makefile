@@ -20,7 +20,7 @@ RED := \033[0;31m
 BLUE := \033[0;34m
 NC := \033[0m # No Color
 
-.PHONY: all compile upload monitor clean install-deps help port-detect certs littlefs build-littlefs flash-all flash-monitor run
+.PHONY: all compile upload monitor clean install-deps help port-detect certs littlefs build-littlefs flash-all flash-monitor flash-all-monitor run
 
 # Default target
 all: compile
@@ -33,14 +33,15 @@ help:
 	@echo "  $(YELLOW)make upload$(NC)        - Upload sketch to ESP32"
 	@echo "  $(YELLOW)make flash$(NC)         - Compile and upload sketch"
 	@echo "  $(YELLOW)make monitor$(NC)       - Open serial monitor"
-	@echo "  $(YELLOW)make run$(NC)           - Flash and monitor"
+	@echo "  $(YELLOW)make flash-monitor$(NC) - Flash sketch and monitor"
+	@echo "  $(YELLOW)make run$(NC)           - Flash and monitor (alias)"
 	@echo ""
 	@echo "$(BLUE)Certificates & LittleFS:$(NC)"
 	@echo "  $(YELLOW)make certs$(NC)         - Auto-create and upload certificates"
 	@echo "  $(YELLOW)make littlefs$(NC)      - Upload existing littlefs.bin"
 	@echo "  $(YELLOW)make build-littlefs$(NC)- Build littlefs.bin from data/"
 	@echo "  $(YELLOW)make flash-all$(NC)     - Flash sketch + LittleFS"
-	@echo "  $(YELLOW)make flash-monitor$(NC) - Flash all and monitor"
+	@echo "  $(YELLOW)make flash-all-monitor$(NC) - Flash sketch + LittleFS and monitor"
 	@echo ""
 	@echo "$(BLUE)Utilities:$(NC)"
 	@echo "  $(YELLOW)make clean$(NC)         - Clean build files"
@@ -54,8 +55,9 @@ help:
 	@echo "  Baud:  $(BAUD)"
 	@echo ""
 	@echo "$(BLUE)Quick Start:$(NC)"
-	@echo "  $(YELLOW)make littlefs$(NC)      # Upload certificates (first time)"
-	@echo "  $(YELLOW)make flash-monitor$(NC) # Flash everything and monitor"
+	@echo "  $(YELLOW)make littlefs$(NC)          # Upload certificates (first time)"
+	@echo "  $(YELLOW)make flash-monitor$(NC)     # Flash sketch and monitor"
+	@echo "  $(YELLOW)make flash-all-monitor$(NC) # Flash sketch + LittleFS and monitor"
 
 # Install required libraries
 install-deps:
@@ -146,7 +148,12 @@ build-littlefs:
 flash-all: compile upload littlefs
 	@echo "$(GREEN)✓ Complete flash (sketch + LittleFS) done!$(NC)"
 
-# Flash and monitor in one step
-flash-monitor: flash-all
+# Flash and monitor in one step (sketch only, not LittleFS)
+flash-monitor: flash
+	@sleep 2
+	@$(MAKE) monitor
+
+# Flash everything (sketch + LittleFS) and monitor
+flash-all-monitor: flash-all
 	@sleep 2
 	@$(MAKE) monitor
